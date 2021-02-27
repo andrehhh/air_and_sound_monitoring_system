@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Machine</title>
+</head>
+<body>
+
+    <div class="container">
+        <div class="d-flex flex-row bd-highlight mb-3">
+            <div class="p-2 bd-highlight"><h1>Machine</h1></div>
+            <div class="lastUpload p-2 bd-highlight align-self-center ms-3"></div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm">
+                <div class="temperature"></div>
+            </div>
+            <div class="col-sm">
+                <div class="mq2"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm">
+                <div class="humidity"></div>
+            </div>
+            <div class="col-sm">
+                <div class="mq7"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm">
+                <div class="sound"></div>
+            </div>
+            <div class="col-sm">
+                <div class="mq135"></div>
+            </div>
+        </div>
+
+        <div class="chartDisplay" style="display: flex; justify-content: center;">
+            <div id="chart1"></div>
+            <div id="chart2"></div>
+        </div>
+
+    </div>
+
+</body>
+</html>
+
+
+<!-- Script -->
+<script type="text/javascript">
+
+    $(document).ready(function() {
+        if(sessionStorage.getItem("machineData")) {
+            machineData = JSON.parse(sessionStorage.getItem("machineData"));
+            updateTemplate(machineData);
+            plotNewChart(machineData);
+        }
+        getDataFromServer();
+        
+    });
+
+    function getDataFromServer() {
+
+        var userInfo = JSON.parse(sessionStorage.getItem("userInfo"));
+
+        userInfo.machineList.forEach(machineId => {
+
+            // GET request to API
+            $.ajax({
+                method: "GET",
+                url: "api/machine/get/" + machineId,
+                success: function(machineData){
+
+                    if(sessionStorage.getItem("machineData")){ // If session exists, update data
+                        if(machineData.length > 0) {
+
+                            updateTemplate(machineData);
+
+                            // Update Session to the latest data
+                            var machineDataCookie = JSON.parse(sessionStorage.getItem("machineData"));
+                            var newMachineDataCookieJson = JSON.stringify(machineDataCookie.concat(machineData));
+                            sessionStorage.setItem("machineData", newMachineDataCookieJson);
+
+                            for(var i = 0; i < machineData.length; i++) {
+                                var temperature = machineData[i].temperature;
+                                var humidity = machineData[i].humidity;
+                                var mq2 = machineData[i].mq2;
+                                var mq7 = machineData[i].mq7;
+                                var mq135 = machineData[i].mq135;
+                                var time_added = new Date(new Date(machineData[i].time_added));
+                                // console.log(machineData[i].sound);
+                                if(machineData[i].sound == true) {
+                                    var sound = 40;
+                                } else {
+                                    var sound = 0;
+                                }
+                                Plotly.extendTraces('chart1', { x:[[time_added], [time_added], [time_added]], y:[[temperature], [humidity], [sound]] }, [0, 1, 2]);
+                                Plotly.extendTraces('chart2', { x:[[time_added], [time_added], [time_added]], y:[[mq2], [mq7], [mq135]] }, [0, 1, 2]);
+                            }
+                        }
+                    
+                    } else {
+                        updateTemplate(machineData);
+                        var machineDataJson = JSON.stringify(machineData);
+                        sessionStorage.setItem("machineData", machineDataJson);
+                        plotNewChart(machineData);
+
+                    }
+                }
+            });
+        });
+
+        setTimeout(getDataFromServer, 10000);
+    }
+        
+    // Update Template
+    function updateTemplate(machineData) {
+        var lastIndex = machineData.length - 1;
+        var lastMachineData = machineData[lastIndex];
+        var time_added = new Date(new Date(machineData[lastIndex].time_added));
+
+        $(".temperature").text("Temperature : " + lastMachineData.temperature);
+        $(".humidity").text("Humidity : " + lastMachineData.humidity);
+        $(".mq2").text("MQ2 Value : " + lastMachineData.mq2);
+        $(".mq7").text("MQ7 Value : " + lastMachineData.mq7);
+        $(".mq135").text("MQ135 Value : " + lastMachineData.mq135);
+        $(".sound").text("Sound : " + lastMachineData.sound);
+        $(".lastUpload").text("Last Upload : " + time_added);
+    }
+
+    function plotNewChart(machineData) {
+        var temperatureArr = [];
+        var humidityArr = [];
+        var mq2Arr = [];
+        var mq7Arr = [];
+        var mq135Arr = [];
+        var timeArr = [];
+        var soundArr = [];
+
+        console.log(machineData);
+
+        for(var i = 0; i < machineData.length; i++) {
+            temperatureArr.push(machineData[i].temperature);
+            humidityArr.push(machineData[i].humidity);
+            mq2Arr.push(machineData[i].mq2);
+            mq7Arr.push(machineData[i].mq7);
+            mq135Arr.push(machineData[i].mq135);
+            if(machineData[i].sound == true){
+                soundArr.push(45);
+            } else {
+                soundArr.push(0);
+            }
+
+            var time_added = new Date(new Date(machineData[i].time_added));
+            timeArr.push(time_added);
+        }
+
+        // Chart 1
+        tempTrace = {
+            x: timeArr,
+            y: temperatureArr,
+            type: 'line',
+            name: 'Temperature'
+        };
+        humiTrace = {
+            x: timeArr,
+            y: humidityArr,
+            type: 'line',
+            name: 'Humidity'
+        };
+        soundTrace = {
+            x: timeArr,
+            y: soundArr,
+            type: 'markers',
+            name: 'Sound'
+        };
+
+        // Chart 2
+        mq2Trace = {
+            x: timeArr,
+            y: mq2Arr,
+            type: 'line',
+            name: 'MQ2 Gas Sensor'
+        };
+        mq7Trace = {
+            x: timeArr,
+            y: mq7Arr,
+            type: 'line',
+            name: 'MQ7 Gas Sensor'
+        };
+        mq135Trace = {
+            x: timeArr,
+            y: mq135Arr,
+            type: 'line',
+            name: 'MQ135 Gas Sensor'
+        };
+
+        var chart1Data = [tempTrace, humiTrace, soundTrace];
+        var chart2Data = [mq2Trace, mq7Trace, mq135Trace];
+
+        var layout = {
+            width: 700,
+            height: 500,
+        };
+
+        Plotly.plot('chart1', chart1Data, layout);
+        Plotly.plot('chart2', chart2Data, layout);
+    }
+
+    // Object Count Function
+    function objectCount(obj) {
+        var result = 0;
+        for(var prop in obj) {
+            if (obj.hasOwnProperty(prop)) {
+                result++;
+            }
+        }
+        return result;
+    }
+
+</script>
