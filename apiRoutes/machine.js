@@ -1,5 +1,7 @@
+require('dotenv').config();
 var express = require('express');
 var MachineData = require('../models/MachineData');
+var User = require('../models/User');
 
 var router = express.Router();
 
@@ -17,37 +19,67 @@ router.get('/upload', async (req, res) => {
         machineId : req.param("machineId"),
         temperature : req.param("temperature"),
         humidity : req.param("humidity"),
-        mq2 : req.param("mq2"),
-        mq7 : req.param("mq7"),
-        mq135 : req.param("mq135"),
+        lpg : req.param("lpg"),
+        alcohol : req.param("alcohol"),
+        co : req.param("co"),
+        co2 : req.param("co2"),
+        smoke : req.param("smoke"),
         sound : sound,
         time_added : new Date().toISOString()
     });
 
-    try{
-        uploadedData = await machineData.save();
-        // console.log(uploadedData);
-        res.json(uploadedData);
+    var lastMachineData = await MachineData.find( { machineId: req.param("machineId") } ).sort({ _id : -1 }).limit(1).exec();
+    lastMachineData = lastMachineData[0];
 
-    } catch(err) {
-        res.json({ message: err });
+    var verificationCount = 0;
+    if(machineData.machineId == lastMachineData.machineId) {
+        verificationCount++;
     }
+    if(machineData.temperature == lastMachineData.temperature) {
+        verificationCount++;
+    }
+    if(machineData.humidity == lastMachineData.humidity) {
+        verificationCount++;
+    }
+    if(machineData.lpg == lastMachineData.lpg) {
+        verificationCount++;
+    }
+    if(machineData.alcohol == lastMachineData.alcohol) {
+        verificationCount++;
+    }
+    if(machineData.co == lastMachineData.co) {
+        verificationCount++;
+    }
+    if(machineData.co2 == lastMachineData.co2) {
+        verificationCount++;
+    }
+    if(machineData.smoke == lastMachineData.smoke) {
+        verificationCount++;
+    }
+    if(machineData.sound == lastMachineData.sound) {
+        verificationCount++;
+    }
+
+    if(verificationCount < 9) {
+
+        console.log("different!")
+
+        try{
+            uploadedData = await machineData.save();
+            // console.log(uploadedData);
+            res.json(uploadedData);
+            
+
+        } catch(err) {
+            res.json({ message: err });
+        }
+    } else {
+        console.log("same!")
+    }
+
+    // uploadedData = await machineData.save();
     
 });
-
-
-// Get All Machine Data (Disabled)
-// router.get('/get', async (req, res) => {
-
-//     try{
-//         var machineDatas = await MachineData.find();
-//         res.json(machineDatas);
-//     } catch(err) {
-//         res.json({ message: err });
-//     }
-    
-// });
-
 
 // Get Specific Machine Data
 router.get('/get/:machineId', async (req, res) => {
@@ -64,7 +96,6 @@ router.get('/get/:machineId', async (req, res) => {
             var newMachineData = await MachineData.find( { machineId: req.params.machineId, _id : { $gt : lastId } } ).exec();
             req.session.machineData = machineData.concat(newMachineData);
 
-            // console.log(newMachineData);
             res.json(newMachineData);
 
         } else { // Returns all record, save as session
@@ -75,7 +106,6 @@ router.get('/get/:machineId', async (req, res) => {
             machineData = await MachineData.find({ machineId: req.params.machineId, time_added : { $gt : dateString } }).exec();
             req.session.machineData = machineData;
 
-            // console.log(machineData);
             res.json(machineData);
         }
 
@@ -91,7 +121,6 @@ function objectCount(obj) {
     var result = 0;
     for(var prop in obj) {
         if (obj.hasOwnProperty(prop)) {
-        // or Object.prototype.hasOwnProperty.call(obj, prop)
         result++;
         }
     }

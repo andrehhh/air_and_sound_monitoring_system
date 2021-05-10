@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Charts</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="/templates/style">
+    <script src="https://code.iconify.design/1/1.0.7/iconify.min.js"></script>
+</head>
+<body class="body-day">
+    <div class="container-chart">
+
+        <div class="row linechart">
+            <div id="temperatureChart"></div>
+        </div>
+
+        <div class="row mt-5 linechart">
+            <div id="humidityChart"></div>
+        </div>
+
+        <div class="row mt-5 linechart">
+            <div id="lpgChart"></div>
+        </div>
+
+        <div class="row mt-5 linechart">
+            <div id="alcoholChart"></div>
+        </div>
+
+        <div class="row mt-5 linechart">
+            <div id="coChart"></div>
+        </div>
+
+        <div class="row mt-5 linechart">
+            <div id="co2Chart"></div>
+        </div>
+
+        <div class="row mt-5 linechart">
+            <div id="smokeChart"></div>
+        </div>
+
+        <div class="row mt-5 linechart">
+            <div id="noiseChart"></div>
+        </div>
+    </div>
+</body>
+</html>
+
+
+<!-- Script -->
+<script type="text/javascript">
+
+    function isNight() {
+        var date = new Date();
+        return (date.getHours() > 20 || date.getHours() < 6);
+    }
+    
+    if(isNight()) {
+        $("body").removeClass("body-day").addClass("body-night");
+    }
+
+    $(document).ready(function() {
+
+        if(sessionStorage.getItem("machineData")) {
+
+            machineData = JSON.parse(sessionStorage.getItem("machineData"));
+        
+            plotNewChart(machineData);
+        }
+    });
+
+    function plotNewChart(machineData) {
+        var temperatureArr = [];
+        var humidityArr = [];
+        var lpgArr = [];
+        var alcoholArr = [];
+        var coArr = [];
+        var co2Arr = [];
+        var smokeArr = [];
+        var timeArr = [];
+        var soundArr = [];
+
+        for(var i = 0; i < machineData.length; i++) {
+            temperatureArr.push(machineData[i].temperature);
+            humidityArr.push(machineData[i].humidity);
+            lpgArr.push(machineData[i].lpg);
+            alcoholArr.push(machineData[i].alcohol);
+            coArr.push(machineData[i].co);
+            co2Arr.push(machineData[i].co2);
+            smokeArr.push(machineData[i].smoke);
+            if(machineData[i].sound == true){
+                soundArr.push(1);
+            } else {
+                soundArr.push(0);
+            }
+
+            var time_added = new Date(new Date(machineData[i].time_added));
+            timeArr.push(time_added);
+        }
+
+        var lastRecord = JSON.stringify(machineData.length);
+            sessionStorage.setItem("lastRecord", lastRecord);
+
+        // Chart 1
+        tempTrace = {
+            x: timeArr,
+            y: temperatureArr,
+            type: 'line',
+            name: 'Temperature'
+        };
+        humiTrace = {
+            x: timeArr,
+            y: humidityArr,
+            type: 'line',
+            name: 'Humidity'
+        };
+        soundTrace = {
+            x: timeArr,
+            y: soundArr,
+            type: 'markers',
+            name: 'Sound'
+        };
+
+        lpgTrace = {
+            x: timeArr,
+            y: lpgArr,
+            type: 'line',
+            name: 'LPG Concentration'
+        };
+
+        alcoholTrace = {
+            x: timeArr,
+            y: alcoholArr,
+            type: 'line',
+            name: 'Alcohol Concentration'
+        };
+
+        coTrace = {
+            x: timeArr,
+            y: coArr,
+            type: 'line',
+            name: 'CO Concentration'
+        };
+
+        co2Trace = {
+            x: timeArr,
+            y: co2Arr,
+            type: 'line',
+            name: 'CO2 Concentration'
+        };
+
+        smokeTrace = {
+            x: timeArr,
+            y: smokeArr,
+            type: 'line',
+            name: 'Smoke Concentration'
+        };
+
+        xaxisLayout = {
+                title: {
+                text: 'Date and Time',
+                font: {
+                    family: 'Courier New, monospace',
+                    size: 18,
+                    color: '#7f7f7f'
+                }
+                },
+            };
+
+        var tempLayout = {
+            title: {
+                text:'Temperature',
+                font: {
+                size: 24
+                },
+            },
+            xaxis: xaxisLayout,
+            yaxis: {
+                title: {
+                text: 'Temperature (Degrees Celcius)',
+                font: {
+                    family: 'Courier New, monospace',
+                    size: 18,
+                    color: '#7f7f7f'
+                }
+                }
+            }
+        };
+
+        var humiLayout = {
+            title: {
+                text:'Humidity',
+                font: {
+                size: 24
+                },
+            },
+            xaxis: xaxisLayout,
+            yaxis: {
+                title: {
+                text: 'Humidity Percentage (%)',
+                font: {
+                    family: 'Courier New, monospace',
+                    size: 18,
+                    color: '#7f7f7f'
+                }
+                }
+            }
+        };
+
+        var lpgLayout = {
+            title: {
+                text:'LPG Concentration',
+                font: {
+                size: 24
+                },
+            },
+            xaxis: xaxisLayout,
+            yaxis: {
+                title: {
+                text: 'Concentration Percentage (%)',
+                font: {
+                    family: 'Courier New, monospace',
+                    size: 18,
+                    color: '#7f7f7f'
+                }
+                }
+            }
+        };
+
+        var alcoholLayout = {
+            title: {
+                text:'Alcohol Concentration',
+                font: {
+                size: 24
+                },
+            },
+            xaxis: xaxisLayout,
+            yaxis: {
+                title: {
+                text: 'Concentration Percentage (%)',
+                font: {
+                    family: 'Courier New, monospace',
+                    size: 18,
+                    color: '#7f7f7f'
+                }
+                }
+            }
+        };
+
+        var coLayout = {
+            title: {
+                text:'Carbon Monoxide (CO) Concentration',
+                font: {
+                size: 24
+                },
+            },
+            xaxis: xaxisLayout,
+            yaxis: {
+                title: {
+                text: 'Concentration Percentage (%)',
+                font: {
+                    family: 'Courier New, monospace',
+                    size: 18,
+                    color: '#7f7f7f'
+                }
+                }
+            }
+        };
+
+        var co2Layout = {
+            title: {
+                text:'Carbon Dioxide (CO2) Concentration',
+                font: {
+                size: 24
+                },
+            },
+            xaxis: xaxisLayout,
+            yaxis: {
+                title: {
+                text: 'Concentration Percentage (%)',
+                font: {
+                    family: 'Courier New, monospace',
+                    size: 18,
+                    color: '#7f7f7f'
+                }
+                }
+            }
+        };
+
+        var smokeLayout = {
+            title: {
+                text:'Smoke Concentration',
+                font: {
+                size: 24
+                },
+            },
+            xaxis: xaxisLayout,
+            yaxis: {
+                title: {
+                text: 'Concentration Percentage (%)',
+                font: {
+                    family: 'Courier New, monospace',
+                    size: 18,
+                    color: '#7f7f7f'
+                }
+                }
+            }
+        };
+
+        var soundLayout = {
+            title: {
+                text:'Sound Detection',
+                font: {
+                size: 24
+                },
+            },
+            xaxis: xaxisLayout,
+            yaxis: {
+                title: {
+                text: 'Yes (1) / No (0)',
+                font: {
+                    family: 'Courier New, monospace',
+                    size: 18,
+                    color: '#7f7f7f'
+                }
+                }
+            }
+        };
+
+
+        var chartData = [tempTrace];
+        Plotly.plot('temperatureChart', chartData, tempLayout);
+
+        chartData = [humiTrace];
+        Plotly.plot('humidityChart', chartData, humiLayout);
+
+        chartData = [lpgTrace];
+        Plotly.plot('lpgChart', chartData, lpgLayout);
+
+        chartData = [alcoholTrace];
+        Plotly.plot('alcoholChart', chartData, alcoholLayout);
+
+        chartData = [coTrace];
+        Plotly.plot('coChart', chartData, coLayout);
+
+        chartData = [co2Trace];
+        Plotly.plot('co2Chart', chartData, co2Layout);
+
+        chartData = [smokeTrace];
+        Plotly.plot('smokeChart', chartData, smokeLayout);
+
+        chartData = [soundTrace];
+        Plotly.plot('noiseChart', chartData, soundLayout);
+    }
+
+    // Object Count Function
+    function objectCount(obj) {
+        var result = 0;
+        for(var prop in obj) {
+            if (obj.hasOwnProperty(prop)) {
+                result++;
+            }
+        }
+        return result;
+    }
+
+</script>

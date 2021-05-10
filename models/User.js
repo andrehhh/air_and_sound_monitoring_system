@@ -8,6 +8,8 @@ var UserSchema = mongoose.Schema({
     },password: {
         type: String,
         required: true
+    },email: {
+        type: String
     },machineList: {
         type: Array,
         required: true

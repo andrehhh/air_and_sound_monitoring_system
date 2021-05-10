@@ -40,7 +40,15 @@ app.get('/dashboard', (req, res) => {
     } else {
         res.redirect('/');
     }
-    
+});
+
+// Chart Route
+app.get('/dashboard/charts/', (req, res) => {
+    if(req.session.loginStatus) {
+        res.sendFile(path.join(templates_dir, 'chart.html'));
+    } else {
+        res.redirect('/');
+    }
 });
 
 
@@ -52,6 +60,11 @@ app.use('/api', apiRoute);
 // Machine Template
 app.get('/templates/machine', (req, res) => {
     res.sendFile(path.join(templates_dir, 'machine.html'));
+})
+
+// Stylesheet
+app.get('/templates/style', (req, res) => {
+    res.sendFile(path.join(templates_dir, 'style.css'));
 })
 
 

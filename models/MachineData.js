@@ -11,13 +11,19 @@ var MachineDataSchema = mongoose.Schema({
     },humidity: {
         type: Number,
         required: true
-    },mq2: {
+    },lpg: {
         type: Number,
         required: true
-    },mq7: {
+    },alcohol: {
         type: Number,
         required: true
-    },mq135: {
+    },co: {
+        type: Number,
+        required: true
+    },co2: {
+        type: Number,
+        required: true
+    },smoke: {
         type: Number,
         required: true
     },sound: {

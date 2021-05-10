@@ -9,22 +9,292 @@
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
-
-    <script>
-        $(function(){
-            $("#includedContent").load("/templates/machine"); 
-        });
-    </script>
+    <link rel="stylesheet" href="/templates/style">
+    <script src="https://code.iconify.design/1/1.0.7/iconify.min.js"></script>
 </head>
-<body>
-    <button class="signOutBtn">Refresh</button>
-    <div id="includedContent"></div>
-    <div id="includedContent2"></div>
-</body>
-</html>
+<body class="body-day">
+<div class="container-fluid">
+	<div class="row justify-content-end header">
+		<div class="d-flex flex-row-reverse align-items-center">
+            <div class="btn refreshBtn">Refresh</div><div class="btn chartsBtn">History</div>
+        </div>
+	</div>
+	<div class="row">
+		<div class="col-md-12 greeting">
+			Good Morning
+		</div>
+	</div>
+	<div class="row content1 justify-content-center">
+		<div class="col-md-6 panel1">
+			<div class="row justify-content-end">
+				<div class="col-md-auto air-quality-index">
+					Air Quality Index
+				</div>
+			</div>
+			<div class="row justify-content-end">
+				<div class="col-md-auto air-quality-index-value">
 
-<script>
-    $(".signOutBtn").click(function() {
+				</div>
+			</div>
+			<div class="row justify-content-end">
+				<div class="col-md-auto air-quality-index-rating">
+
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6 panel2">
+			<div class="row">
+				<div class="col-md-12 temperature">
+					24
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12 noise-alert sound">
+					 last noise
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12 last-updated time_added">
+					 last update
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row justify-content-md-center content2">
+		<div class="col-md-3 object-col">
+			<div class="row justify-content-md-center object">
+				<div class="col-md-2">
+					<span class="iconify" data-icon="wi-humidity" data-inline="false" font-size="50px"></span>
+				</div>
+				<div class="col-md-6">
+					<div class="row">
+						<div class="col-md-12 humidity value"></div>
+					</div>
+					<div class="row">
+						<div class="col-md-12">
+							Humidity
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row justify-content-md-center object">
+				<div class="col-md-2">
+					<span class="iconify" data-icon="el:fire" data-inline="false" font-size="50px"></span>
+				</div>
+				<div class="col-md-6">
+					<div class="row">
+						<div class="col-md-12 lpg value"></div>
+					</div>
+					<div class="row">
+						<div class="col-md-12">
+                            LPG
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-3 object-col">
+			<div class="row justify-content-md-center object">
+				<div class="col-md-2">
+					<span class="iconify" data-icon="cil:drink-alcohol" data-inline="false" font-size="50px"></span>
+				</div>
+				<div class="col-md-6">
+					<div class="row">
+						<div class="col-md-12 alcohol value"></div>
+					</div>
+					<div class="row">
+						<div class="col-md-12">
+                            Alcohol
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row justify-content-md-center object">
+				<div class="col-md-2">
+					<span class="iconify" data-icon="mdi:molecule-co" data-inline="false" font-size="50px"></span>
+				</div>
+				<div class="col-md-6">
+					<div class="row">
+						<div class="col-md-12 co value"></div>
+					</div>
+					<div class="row">
+						<div class="col-md-12">
+							Carbon Monoxide
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-3 object-col">
+			<div class="row justify-content-center object">
+				<div class="col-md-2">
+					<span class="iconify" data-icon="mdi:molecule-co2" data-inline="false" font-size="50px"></span>
+				</div>
+				<div class="col-md-6">
+					<div class="row">
+						<div class="col-md-12 co2 value"></div>
+					</div>
+					<div class="row">
+						<div class="col-md-12">
+							Carbon Dioxide
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row justify-content-md-center object">
+				<div class="col-md-2">
+					<span class="iconify" data-icon="wi:smoke" data-inline="false" font-size="50px">
+				</div>
+				<div class="col-md-6">
+					<div class="row">
+						<div class="col-md-12 smoke value"></div>
+					</div>
+					<div class="row">
+						<div class="col-md-12">
+                            Smoke
+                        </div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<!-- Script -->
+<script type="text/javascript">
+
+    function isNight() {
+        var date = new Date();
+        return (date.getHours() > 20 || date.getHours() < 6);
+    }
+    
+    if(isNight()) {
+        $("body").removeClass("body-day").addClass("body-night");
+        $(".greeting").text("Good Night");
+    }
+
+	
+
+
+    $(document).ready(function() {
+        if(sessionStorage.getItem("machineData")) {
+            machineData = JSON.parse(sessionStorage.getItem("machineData"));
+            updateTemplate(machineData);
+        }
+        getDataFromServer();
+        
+    });
+
+    function getDataFromServer() {
+
+        var userInfo = JSON.parse(sessionStorage.getItem("userInfo"));
+
+        console.log("refreshing");
+
+        userInfo.machineList.forEach(machineId => {
+
+            // GET request to API
+            $.ajax({
+                method: "GET",
+                url: "api/machine/get/" + machineId,
+                success: function(machineData){
+
+                    if(sessionStorage.getItem("machineData")){ // If session exists, update data
+                        if(machineData.length > 0) {
+                            
+                            // Update Session to the latest data
+                            var machineDataCookie = JSON.parse(sessionStorage.getItem("machineData"));
+                            var newMachineDataCookieJson = JSON.stringify(machineDataCookie.concat(machineData));
+                            sessionStorage.setItem("machineData", newMachineDataCookieJson);
+
+                            updateTemplate(machineData);
+                        }
+                    
+                    } else {
+                        
+                        var machineDataJson = JSON.stringify(machineData);
+                        sessionStorage.setItem("machineData", machineDataJson);
+
+                        for(var i = machineData.length-1; i >= 0; i--) {
+                            if(machineData[i].sound == true){
+                                var time_added = String(new Date(new Date(machineData[i].time_added)));
+                                var lastNoiseJson = JSON.stringify(time_added);
+                                sessionStorage.setItem("lastNoise", lastNoiseJson);
+                                console.log(lastNoiseJson);
+                                break;
+                            }
+                        }
+                        updateTemplate(machineData);
+                    }
+                }
+            });
+        });
+
+        setTimeout(getDataFromServer, 10000);
+    }
+        
+    // Update Template
+    function updateTemplate(machineData) {
+        var lastIndex = machineData.length - 1;
+        var lastMachineData = machineData[lastIndex];
+        var time_added = String(new Date(new Date(machineData[lastIndex].time_added)));
+
+        $(".temperature").text(lastMachineData.temperature + "°C");
+        $(".humidity").text(lastMachineData.humidity + "%");
+        $(".lpg").text(lastMachineData.lpg + "%");
+        $(".alcohol").text(lastMachineData.alcohol + "%");
+        $(".co").text(lastMachineData.co + "%");
+        $(".co2").text(lastMachineData.co2 + "%");
+        $(".smoke").text(lastMachineData.smoke + "%");
+        $(".time_added").text("Last Updated : " + time_added);
+
+		console.log(lastMachineData.co);
+
+        var aqi = (lastMachineData.co2*10000/400)*50;
+		aqi = Math.round(aqi * 10) / 10
+        if(aqi == 0 ) {
+            $(".air-quality-index-value").text(1);
+        } else {
+            $(".air-quality-index-value").text(aqi);
+        }
+
+        if(aqi < 51) {
+            $(".air-quality-index-rating").text("Excellent");
+            $(".air-quality-index-rating").css("color", "#66ff66")
+        } else if(aqi < 101) {
+            $(".air-quality-index-rating").text("Fine");
+            $(".air-quality-index-rating").css("color", "#ffff66")
+        } else if(aqi < 151) {
+            $(".air-quality-index-rating").text("Moderate");
+            $(".air-quality-index-rating").css("color", "#ff8c66")
+        } else if(aqi < 201) {
+            $(".air-quality-index-rating").text("Poor");
+            $(".air-quality-index-rating").css("color", "#ff6666")
+        } else if(aqi < 301) {
+            $(".air-quality-index-rating").text("Very Poor");
+            $(".air-quality-index-rating").css("color", "#8c66ff")
+        } else {
+            $(".air-quality-index-rating").text("Severe");
+            $(".air-quality-index-rating").css("color", "#800000")
+        }
+
+        if(lastMachineData.sound == false) {
+            if(sessionStorage.getItem("lastNoise")){
+                var lastNoise = sessionStorage.getItem("lastNoise").replace(/['"]+/g, '');
+                $(".sound").text("Last Noise Alert : " + lastNoise);
+            } else {
+                $(".sound").text("Last Noise Alert : None");
+            }
+            
+        } else {
+            var lastNoiseJson = JSON.stringify(time_added);
+            sessionStorage.setItem("lastNoise", lastNoiseJson);
+            $(".sound").text("Last Noise Alert : " + time_added);
+        }
+    }
+
+    $(".refreshBtn").click(function() {
         $.ajax({
                 method: "GET",
                 url: "api/user/logout",
@@ -32,6 +302,7 @@
                     if(res == "1") {
                         sessionStorage.removeItem("userInfo"); // Delete userInfo Cookie
                         sessionStorage.removeItem("machineData"); // Delete userInfo Cookie
+                        sessionStorage.removeItem("lastNoise"); // Delete userInfo Cookie
                         console.log("Logout Success");
                         window.location.replace("/");
                     }
@@ -39,5 +310,8 @@
             });
     });
 
+    $(".chartsBtn").click(function() {
+        window.open("/dashboard/charts");
+    });
 
 </script>

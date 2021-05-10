@@ -10,7 +10,8 @@ router.post('/create', async (req, res) => {
     var user = new User({
         username : req.body.username,
         password : req.body.password,
-        machineList : req.body.machineList
+        machineList : req.body.machineList,
+        email : req.body.email
     });
 
     try{
@@ -20,6 +21,7 @@ router.post('/create', async (req, res) => {
         var filteredCreatedUser = {};
         filteredCreatedUser._id = createdUser._id;
         filteredCreatedUser.machineList = createdUser.machineList;
+        filteredCreatedUser.email = createdUser.email;
 
         // console.log(filteredCreatedUser);
         req.session.loginStatus = true;

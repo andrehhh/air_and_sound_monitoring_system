@@ -1,0 +1,170 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    height: 100vh;
+    width: 100%;
+    color: white;
+}
+
+.body-day {
+    background: rgb(0,189,255);
+    background: linear-gradient(0deg, rgba(0,189,255,1) 20%, rgba(21,63,189,1) 100%);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+.body-night {
+    background: rgb(47,47,47);
+    background: linear-gradient(0deg, rgba(47,47,47,1) 20%, rgba(29,29,29,1) 100%);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+.container-fluid {
+    width: 80%;
+    margin-top: 10px;
+}
+
+.header{
+    height: 7vh;
+    color: white;
+    font-size: 20px;
+}
+
+.refreshBtn {
+    padding-left: 2%;
+    color: white;
+}
+
+.chartsBtn {
+    padding-right: 2%;
+    border-right: 1px solid white;
+    color: white;
+}
+
+.greeting {
+    color: white;
+    font-size: 60px;
+    margin-top: 2vh;
+}
+
+/* Content 1 */
+.content1 {
+    margin-top: 7vh;;
+}
+
+/* Panel 1 */
+.content1 .panel1 {
+    border-right: 1px solid rgba(255,255,255,0.15);
+    padding-right: 3%;
+}
+
+.air-quality-index {
+    font-size: 24px;
+    float: right;
+}
+
+.air-quality-index-value {
+    height: 80%;
+    font-size: 200px;
+}
+
+.air-quality-index-rating {
+    font-size: 36px;
+    height: 15%;
+    margin-top: -10px;
+}
+
+/* Panel 2 */
+.content1 .panel2 {
+    padding-left: 3%;
+}
+
+.temperature {
+    font-size: 130px;
+}
+
+.noise-alert {
+    margin-top: 5vh;
+    font-size: 18px;
+}
+
+.last-updated {
+    margin-top: 3vh;
+    font-size: 18px;
+}
+
+
+/* Content 2 */
+.content2 {
+    margin-top: 4vh;
+    color: white;
+    border-top: 1px solid rgba(255,255,255,0.15);
+}
+
+.object {
+    margin-top: 4vh;
+}
+
+.linechart {
+    padding: 20px;
+}
+
+.container-chart {
+    background-color: white;
+}
+
+/* Mobile Version */
+@media only screen and (max-width: 767px) {
+
+    .container-fluid {
+        width : 95%;
+    }
+
+    .refreshBtn {
+        margin-right: -5%;
+    }
+
+    .greeting {
+        margin-top: 7vh;
+    }
+
+    .content1 {
+        margin-top: 18vh;
+    }
+
+    .content1 .panel1 {
+        border: 0;
+    }
+
+    .air-quality-index-value {
+        font-size: 130px;
+        float: right;
+    }
+
+    .content2 {
+        margin-top: 10vh;
+    }
+
+    .object {
+        margin-top: 10vh;
+        font-size: 20px;
+    }
+
+    .object .iconify {
+        font-size: 100px;
+    }
+
+    .object .value {
+        font-size: 36px;
+        font-weight: bold;
+    }
+
+    .object-col {
+        text-align: center;
+    }
+
+}
